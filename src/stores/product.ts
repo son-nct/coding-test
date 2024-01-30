@@ -59,7 +59,10 @@ export const useProductStore = defineStore('product-store', {
 
       return { url, pick }
     },
-    async fetchPaginatedProducts(apiConfig: APIConfig, paginationDetail: PaginationDetails): Promise<ProductDataResponse | null> {
+    async fetchPaginatedProducts(
+      apiConfig: APIConfig,
+      paginationDetail: PaginationDetails
+    ): Promise<ProductDataResponse | null> {
       const queryParams = {
         limit: paginationDetail.limit,
         skip: paginationDetail.skip,
@@ -77,17 +80,21 @@ export const useProductStore = defineStore('product-store', {
 
       return data.value ? data.value : null
     },
-    showErrToast () {
+    showErrToast() {
       const { toast } = useToast()
       toast({
         title: 'Uh oh! Something went wrong.',
         description: 'There was a problem with your request.',
-        variant: "destructive",
-        action: h(ToastAction, {
-          altText: 'Try again',
-        }, {
-          default: () => 'Try again',
-        }),
+        variant: 'destructive',
+        action: h(
+          ToastAction,
+          {
+            altText: 'Try again'
+          },
+          {
+            default: () => 'Try again'
+          }
+        )
       })
     },
     async loadMoreProducts(currentPage: number, limit: number): Promise<LoadMoreDataResponse> {

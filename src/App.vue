@@ -8,5 +8,4 @@ import Toaster from '@/components/ui/toast/Toaster.vue'
   <Toaster />
   <AppHeader />
   <RouterView></RouterView>
-
 </template>

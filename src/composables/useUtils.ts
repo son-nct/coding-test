@@ -19,17 +19,17 @@ export const formattedCurrency = (currency: number): string => {
  *
  * @param currentPage - The current page number.
  * @param limit - The number of items to load per page.
- * @param loadMoreCallBack - A callback function that loads more items. 
+ * @param loadMoreCallBack - A callback function that loads more items.
  *                           It should return a Promise of LoadMoreDataResponse.
  * @param threshold - The scroll threshold (in pixels) to trigger loading more items.
- * @returns An object containing the updated page number and a flag indicating 
+ * @returns An object containing the updated page number and a flag indicating
  *          if more items are available to be loaded.
  *
  * @example
  * const { pageNumber, hasMore } = await handleInfiniteScroll(
- *   currentPage, 
- *   limit, 
- *   loadMoreCallBack, 
+ *   currentPage,
+ *   limit,
+ *   loadMoreCallBack,
  *   threshold
  * )
  */

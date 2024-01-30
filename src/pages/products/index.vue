@@ -39,7 +39,12 @@ const handleScroll = async () => {
     if (scrollY + windowHeight - productContainerHeight >= threshold) {
       isLoading.value = true
 
-      const { pageNumber, hasMore } = await handleInfiniteScroll(currentPage.value, limit, loadMore, threshold)
+      const { pageNumber, hasMore } = await handleInfiniteScroll(
+        currentPage.value,
+        limit,
+        loadMore,
+        threshold
+      )
       if (!hasMore) {
         window.removeEventListener('scroll', handleScroll)
       } else {
@@ -48,7 +53,6 @@ const handleScroll = async () => {
 
       isLoading.value = false
     }
-
   }
 }
 
@@ -71,13 +75,12 @@ onBeforeUnmount(() => {
 
 <template>
   <ProductLayout>
-    <template #title>Product List - {{ totalProduct  }}</template>
+    <template #title>Product List - {{ totalProduct }}</template>
     <template #product-list>
       <div ref="productContainer">
         <product-list :products="products" />
-        <spinner v-if="isLoading"/>
+        <spinner v-if="isLoading" />
       </div>
     </template>
-
   </ProductLayout>
 </template>
