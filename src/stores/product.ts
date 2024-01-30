@@ -26,7 +26,8 @@ interface APIConfig {
   pick: string
 }
 
-interface PaginationDetails {
+export interface PaginationDetails {
+  search?: string
   limit: number
   skip: number
 }
@@ -52,9 +53,9 @@ export const useProductStore = defineStore('product-store', {
       this.productList = data.products
       this.total = data.total
     },
-    buildProductAPIConfig(): APIConfig {
+    buildProductAPIConfig(searchValue: string): APIConfig {
       const baseURI = import.meta.env.VITE_BASE_URI
-      const url = baseURI + '/product'
+      const url = searchValue ? baseURI + '/product/search' : baseURI + '/product'
       const pick = 'title,price,images'
 
       return { url, pick }
@@ -63,11 +64,16 @@ export const useProductStore = defineStore('product-store', {
       apiConfig: APIConfig,
       paginationDetail: PaginationDetails
     ): Promise<ProductDataResponse | null> {
-      const queryParams = {
+      const queryParams: Record<string, any> = {
         limit: paginationDetail.limit,
         skip: paginationDetail.skip,
         select: apiConfig.pick
       }
+
+      if ('search' in paginationDetail && paginationDetail.search !== '') {
+        queryParams.q = paginationDetail.search
+      }
+
       const { data, error } = await useFetch(apiConfig.url, {
         params: queryParams
       })
@@ -97,14 +103,22 @@ export const useProductStore = defineStore('product-store', {
         )
       })
     },
-    async loadMoreProducts(currentPage: number, limit: number): Promise<LoadMoreDataResponse> {
+    async loadMoreProducts(
+      currentPage: number,
+      limit: number,
+      searchValue = ''
+    ): Promise<LoadMoreDataResponse> {
       const newPage = currentPage + 1
       const skip = calculateSkip(newPage, limit)
-      const { url, pick } = this.buildProductAPIConfig()
-      const queryParams = {
+      const { url, pick } = this.buildProductAPIConfig(searchValue)
+      const queryParams: Record<string, any> = {
         limit,
         skip,
         select: pick
+      }
+
+      if (searchValue !== '') {
+        queryParams.q = searchValue
       }
 
       const { data, error } = await useFetch(url, {

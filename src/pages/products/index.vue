@@ -1,27 +1,72 @@
 <script setup lang="ts">
 import ProductLayout from '@/components/templates/product/ProductLayout.vue'
 import ProductList from '@/components/organisms/product/product-list/ProductList.vue'
+import SearchBar from '@/components/molecules/common/SearchBar.vue'
 import Spinner from '@/components/ui/spinner/Spinner.vue'
+import _ from 'lodash'
 
-import { useProductStore } from '@/stores/product'
-import { nextTick, computed, onBeforeMount, onBeforeUnmount, onMounted, ref } from 'vue'
+import { useProductStore, type PaginationDetails } from '@/stores/product'
+import { onBeforeMount, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { handleInfiniteScroll } from '@/composables/useUtils'
 import type { Product } from '@/types/product'
+import { useRoute, useRouter } from 'vue-router'
+
 const productStore = useProductStore()
 const products = ref<Product[]>([])
 
-const apiConfig = productStore.buildProductAPIConfig()
 const limit = 20 // 20 products per page
 const currentPage = ref(1)
 const skip = 0
 const totalProduct = ref(0)
 const isLoading = ref(false)
 const productContainer = ref<HTMLElement | null>(null)
-
 const threshold = 80
 
+const router = useRouter()
+const route = useRoute()
+const searchValue = ref((route.query.search as string) || '')
+const isDataFetched = ref(false)
+
+const attachScrollListener = () => {
+  window.addEventListener('scroll', handleScroll)
+}
+
+const updateQueryParams = (queryValue: string) => {
+  const query = queryValue ? { search: queryValue } : {}
+  router.push({ name: 'productPage', query })
+}
+
+const fetchProducts = async (keyword: string) => {
+  const queryParams: PaginationDetails = { limit, skip, search: keyword }
+  const apiConfig = productStore.buildProductAPIConfig(keyword)
+  return productStore.fetchPaginatedProducts(apiConfig, queryParams)
+}
+
+const updateProducts = async (keyword: string) => {
+  showLoading(true)
+  currentPage.value = 1
+  const productList = await fetchProducts(keyword)
+  isDataFetched.value = true
+  if (productList) {
+    products.value = productList.products
+    totalProduct.value = productList.total
+  }
+  showLoading(false)
+  attachScrollListener()
+}
+
+const showLoading = (toggle: boolean) => (isLoading.value = toggle)
+
+const debouncedUpdateProducts = _.debounce(updateProducts, 500)
+
+watch(searchValue, (newVal: string) => {
+  isDataFetched.value = false
+  updateQueryParams(newVal)
+  debouncedUpdateProducts(newVal)
+})
+
 const loadMore = async () => {
-  const response = await productStore.loadMoreProducts(currentPage.value, limit)
+  const response = await productStore.loadMoreProducts(currentPage.value, limit, searchValue.value)
   if (response.items && response.items.length > 0) {
     products.value = [...products.value, ...response.items]
   }
@@ -37,7 +82,7 @@ const handleScroll = async () => {
     const windowHeight = window.innerHeight
 
     if (scrollY + windowHeight - productContainerHeight >= threshold) {
-      isLoading.value = true
+      showLoading(true)
 
       const { pageNumber, hasMore } = await handleInfiniteScroll(
         currentPage.value,
@@ -51,31 +96,38 @@ const handleScroll = async () => {
         currentPage.value = pageNumber
       }
 
-      isLoading.value = false
+      showLoading(false)
     }
   }
 }
 
-onBeforeMount(() => {
-  window.addEventListener('scroll', handleScroll)
-})
+onBeforeMount(() => attachScrollListener())
+onBeforeUnmount(() => window.removeEventListener('scroll', handleScroll))
 
-onMounted(async () => {
-  const productList = await productStore.fetchPaginatedProducts(apiConfig, { limit, skip })
-  if (productList) {
-    products.value = productList.products
-    totalProduct.value = productList.total
-  }
-})
-
-onBeforeUnmount(() => {
-  window.removeEventListener('scroll', handleScroll)
+onMounted(() => {
+  updateQueryParams(searchValue.value)
+  updateProducts(searchValue.value)
 })
 </script>
 
 <template>
   <ProductLayout>
-    <template #title>Product List - {{ totalProduct }}</template>
+    <template #title>
+      {{ searchValue ? 'Search results' : 'Product List' }}
+    </template>
+    <template #search>
+      <search-bar
+        v-model="searchValue"
+        placeholder="Search for the product you want ..."
+      ></search-bar>
+      <span class="text-2xl font-thin" v-if="!isLoading && isDataFetched">
+        {{
+          searchValue
+            ? `${totalProduct} results found for "${searchValue}"`
+            : `Total: ${totalProduct} products`
+        }}
+      </span>
+    </template>
     <template #product-list>
       <div ref="productContainer">
         <product-list :products="products" />
