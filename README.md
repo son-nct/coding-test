@@ -1,25 +1,53 @@
-# coding-test
+# Coding Project
 
-This template should help get you started developing with Vue 3 in Vite.
+Infinite Scrolling and Searchable Product List
 
-## Recommended IDE Setup
+## Table of Contents
+- [Tech Stack](#tech-stack)
+- [Folder Structure](#folder-structure)
+- [Composables](#composables)
+- [Unit Testing](#unit-testing)
+- [Project Setup](#project-setup)
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+## Tech Stack
 
-## Type Support for `.vue` Imports in TS
+This project is built using the following technologies:
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin) to make the TypeScript language service aware of `.vue` types.
+- **Vue3**
+- **TailwindCSS**
+- **Pinia**: Store library and state management framework for Vue.js.
+- **ShadcnUI**: A UI library for Vue.js (specific to this project).
+- **Vue-Masonry-Wall**: A Vue component for creating masonry layout.
+- **Axios**: A promise-based HTTP client for making HTTP requests.
 
-If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has also implemented a [Take Over Mode](https://github.com/johnsoncodehk/volar/discussions/471#discussioncomment-1361669) that is more performant. You can enable it by the following steps:
+## Folder Structure
 
-1. Disable the built-in TypeScript Extension
-   1. Run `Extensions: Show Built-in Extensions` from VSCode's command palette
-   2. Find `TypeScript and JavaScript Language Features`, right click and select `Disable (Workspace)`
-2. Reload the VSCode window by running `Developer: Reload Window` from the command palette.
+I am using an atomic design pattern for my folder structure:
 
-## Customize configuration
+- **UI (ShadcnUI specific)**: A separate folder created by ShadcnUI. Contains individual components like buttons, spinner, toasts.
+- **Molecules**: Comprises multiple atoms combined together.
+- **Organism**: Consists of multiple molecules combined.
+- **Template**: Holds the layout for setting the position and style of components.
+- **Page**: Includes all layouts and components to compose a full page.
 
-See [Vite Configuration Reference](https://vitejs.dev/config/).
+## Composables
+
+This folder stores reusable functions:
+
+- **useFetch**: A custom axios hook for API calls.
+- **usePagination**: Contains functions related to pagination.
+- **useUtils**: Stores various common utility functions. Examples include: formattedCurrency, handleInfiniteScroll.
+
+## Unit Testing
+
+**Vitest**: I am using Vitest for unit testing to ensure code quality and reliability.
+
+- **buildProductAPIConfig Function**:
+  - Ensures API configuration adapts based on the search value provided.
+  
+- **fetchPaginatedProducts Function**:
+  - Testing successful retrieval of products, both with and without a search value.
+  - Handling errors appropriately, including showing a toast notification when an error occurs.
 
 ## Project Setup
 
