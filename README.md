@@ -25,12 +25,15 @@ This project is built using the following technologies:
 ## Folder Structure
 
 I am using an atomic design pattern for my folder structure:
-
-- **UI (ShadcnUI specific)**: A separate folder created by ShadcnUI. Contains individual components like buttons, spinner, toasts.
-- **Molecules**: Comprises multiple atoms combined together.
-- **Organism**: Consists of multiple molecules combined.
-- **Template**: Holds the layout for setting the position and style of components.
-- **Page**: Includes all layouts and components to compose a full page.
+- **assets**: Contains static resources like images, fonts, and styles, essential for the visual consistency of the app.
+- **router**: Configures Vue Router for defining the app's navigation structure.
+- **store**: Includes Pinia store files for state management, enabling reactive and efficient state sharing.
+- **type**: TypeScript type definitions and interfaces for data modeling.
+- **ui (ShadcnUI specific)**: A separate folder created by ShadcnUI. Contains individual components like buttons, spinner, toasts.
+- **molecules**: Comprises multiple atoms combined together.
+- **organisms**: Consists of multiple molecules combined.
+- **templates**: Holds the layout for setting the position and style of components.
+- **pages**: Includes all layouts and components to compose a full page.
 
 ## Composables
 
