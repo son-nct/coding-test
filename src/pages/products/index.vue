@@ -130,7 +130,7 @@ onMounted(() => {
     </template>
     <template #product-list>
       <div ref="productContainer">
-        <product-list :products="products" />
+        <product-list :products="products" v-if="isDataFetched" />
         <spinner v-if="isLoading" />
       </div>
     </template>

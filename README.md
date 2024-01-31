@@ -3,6 +3,7 @@
 Infinite Scrolling and Searchable Product List
 
 ## Table of Contents
+
 - [Tech Stack](#tech-stack)
 - [Folder Structure](#folder-structure)
 - [Composables](#composables)
@@ -44,7 +45,6 @@ This folder stores reusable functions:
 
 - **buildProductAPIConfig Function**:
   - Ensures API configuration adapts based on the search value provided.
-  
 - **fetchPaginatedProducts Function**:
   - Testing successful retrieval of products, both with and without a search value.
   - Handling errors appropriately, including showing a toast notification when an error occurs.
