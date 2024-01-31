@@ -1,6 +1,7 @@
 # Coding Project
 
-Infinite Scrolling and Searchable Product List
+- Infinite Scrolling and Searchable Product List
+- **Link Demo**: https://son-nct.netlify.app
 
 ## Table of Contents
 
