@@ -49,10 +49,6 @@ export const useProductStore = defineStore('product-store', {
     }
   },
   actions: {
-    async updateProductData(data: ProductDataResponse) {
-      this.productList = data.products
-      this.total = data.total
-    },
     buildProductAPIConfig(searchValue: string): APIConfig {
       const baseURI = import.meta.env.VITE_BASE_URI
       const url = searchValue ? baseURI + '/product/search' : baseURI + '/product'

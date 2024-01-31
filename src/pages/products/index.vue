@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import ProductLayout from '@/components/templates/product/ProductLayout.vue'
-import ProductList from '@/components/organisms/product/product-list/ProductList.vue'
+import ProductList from '@/components/organisms/product/ProductList.vue'
 import SearchBar from '@/components/molecules/common/SearchBar.vue'
 import Spinner from '@/components/ui/spinner/Spinner.vue'
 import _ from 'lodash'
