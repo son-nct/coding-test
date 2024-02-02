@@ -55,6 +55,17 @@ This folder stores reusable functions:
 
 ## Project Setup
 
+### Create a .env file in the root directory of project.
+- Add the following line to .env file:
+
+```sh
+VITE_BASE_URI='https://dummyjson.com'
+```
+
+![Image instructions](https://i.ibb.co/715cztB/Screen-Shot-2024-02-02-at-21-07-56.png "Image instructions")
+
+### Install Dependencies
+
 ```sh
 npm install
 ```
@@ -65,20 +76,8 @@ npm install
 npm run dev
 ```
 
-### Type-Check, Compile and Minify for Production
-
-```sh
-npm run build
-```
-
 ### Run Unit Tests with [Vitest](https://vitest.dev/)
 
 ```sh
 npm run test:unit
-```
-
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-npm run lint
 ```
